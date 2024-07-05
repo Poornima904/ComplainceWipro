@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/ControllerExtension"],function(e){"use strict";return e.extend("masterdata1.ext.controller.ObjectPage",{override:{onInit:function(){var e=this.base.getExtensionAPI().getModel()},routing:{onBeforeBinding:async function(e){debugger;sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FooterBar::StandardAction::Save").setVisible(false);sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FooterBar::StandardAction::Save").setEnabled(false)}}}})});
+//# sourceMappingURL=ObjectPage.controller.js.map

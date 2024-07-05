@@ -1,0 +1,21 @@
+{
+  "ext/controller/AuditLog-dbg.js": 1720157934099,
+  "ext/fragment/Attachments.js": 1720073457401,
+  "ext/fragment/ExtesionReq.js": 1720073850497,
+  "ext/controller/AuditLog.js": 1720157934099,
+  "manifest.json": 1720158060571,
+  "Component.js": 1720071404949,
+  "ext/fragment/ExtesionReq-dbg.js": 1720073850497,
+  "ext/fragment/ExtesionReq.js.map": 1720158060776,
+  "ext/fragment/Attachments-dbg.js": 1720073457401,
+  "ext/fragment/Attachments.js.map": 1720158060790,
+  "i18n/i18n.properties": 1720071414885,
+  "ext/controller/AuditLog.js.map": 1720158060776,
+  "Component-dbg.js": 1720071404949,
+  "Component.js.map": 1720158060771,
+  "Component-preload.js": 1720158061025,
+  "Component-preload.js.map": 1720158061025,
+  "ext/fragment/ExtesionReq.fragment.xml": 1720073718875,
+  "ext/fragment/Attachments.fragment.xml": 1720074114358,
+  "index.html": 1720071404949
+}

@@ -1,0 +1,70 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:macros="sap.fe.macros"
+displayBlock="true"
+xmlns:mvc="sap.ui.core.mvc"
+	xmlns:upload="sap.m.upload">
+	<VBox id= "11" >
+	
+						<upload:UploadSet
+					
+					id="uploadSet"
+					core:require="{handler: 'complaince33/ext/fragment/Attachments'}"
+					instantUpload="false"
+					uploadEnabled="true"
+					showIcons="true"
+					afterItemAdded="handler.onAfterItemAdded"
+					uploadCompleted="handler.onUploadCompleted"
+					items="{
+								path: '/Files',
+								parameters: {
+									$orderby: 'createdAt desc'
+								},
+								templateShareable: false}"
+				>
+					<upload:toolbar>
+					</upload:toolbar>
+					<upload:items>
+						<upload:UploadSetItem
+						id="ddd"
+							fileName="{fileName}"
+							mediaType="{mediaType}"
+							url="{url}"
+							thumbnailUrl="{
+								path: 'mediaType',
+								formatter: 'handler.formatThumbnailUrl'
+							}"
+							enabledEdit="false"
+							openPressed="handler.onOpenPressed"
+							removePressed="handler.onRemovePressed"
+						>
+							<upload:attributes>
+								<ObjectAttribute
+								id="dd"
+									title="Uploaded By"
+									text="{createdBy}"
+									active="false"
+								/>
+								<ObjectAttribute
+								id="dd22"
+									title="Uploaded on"
+									text="{createdAt}"
+									active="false"
+								/>
+								<ObjectAttribute
+								id="dddw2"
+
+									title="File Type"
+									text="{mediaType}"
+									active="false"
+								/>
+								<ObjectAttribute
+								id="dd22a"
+									title="File Size"
+									text="{size}"
+									active="false"
+								/>
+							</upload:attributes>
+						</upload:UploadSetItem>
+					</upload:items>
+				</upload:UploadSet>
+	</VBox>
+</core:FragmentDefinition>

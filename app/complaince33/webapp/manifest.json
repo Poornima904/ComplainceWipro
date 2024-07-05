@@ -1,0 +1,189 @@
+{
+  "_version": "1.59.0",
+  "sap.app": {
+    "id": "complaince33",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.14.0",
+      "toolsId": "643ac10a-3a24-4c9d-9cd0-622f4910ddb1"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/my/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "complaince33semobj-display": {
+          "semanticObject": "complaince33semobj",
+          "action": "display",
+          "title": "{{flpTitle}}",
+          "signature": {
+            "parameters": {
+              "year": {
+                "required": true
+              }
+            },
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.125.1",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.ushell": {},
+        "sap.fe.templates": {},
+        "sap.suite.ui.commons": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "complaince33.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "ComplianceList",
+          "target": "ComplianceList"
+        },
+        {
+          "pattern": "Compliance({key}):?query:",
+          "name": "ComplianceObjectPage",
+          "target": "ComplianceObjectPage"
+        }
+      ],
+      "targets": {
+        "ComplianceList": {
+          "type": "Component",
+          "id": "ComplianceList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/Compliance",
+              "navigation": {
+                "Compliance": {
+                  "detail": {
+                    "route": "ComplianceObjectPage"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ComplianceObjectPage": {
+          "type": "Component",
+          "id": "ComplianceObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "allowDeepLinking": true,
+              "contextPath": "/Compliance",
+              "navigation": {},
+              "content": {
+                "body": {
+                  "sections": {
+                    "Attachments": {
+                      "template": "complaince33.ext.fragment.Attachments",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "GeneralInformation"
+                      },
+                      "title": "Attachments"
+                    },
+                    "ExtesionReq": {
+                      "template": "complaince33.ext.fragment.ExtesionReq",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "GeneralInformation"
+                      },
+                      "title": "Extension Request"
+                    }
+                  }
+                },
+                "footer": {
+                  "actions": {
+                    "AuditLog1": {
+                      "press": "complaince33.ext.controller.AuditLog.AuditLog1",
+                      "visible": true,
+                      "enabled": true,
+                      "text": "Audit Logs"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "appr"
+  }
+}

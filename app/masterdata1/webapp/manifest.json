@@ -1,0 +1,199 @@
+{
+  "_version": "1.59.0",
+  "sap.app": {
+    "id": "masterdata1",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.14.0",
+      "toolsId": "db77117d-71fe-41a1-9032-39cedefa55c2"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/my/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "master1-display": {
+          "semanticObject": "master1",
+          "action": "display",
+          "title": "{{flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      },
+      "outbounds": {
+        "ReportEntity-display": {
+          "semanticObject": "ReportEntity",
+          "action": "display",
+          "parameters": {}
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.125.1",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.ushell": {},
+        "sap.fe.templates": {},
+        "sap.suite.ui.commons": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "masterdata1.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "MasterDataList",
+          "target": "MasterDataList"
+        },
+        {
+          "pattern": "MasterData({key}):?query:",
+          "name": "MasterDataObjectPage",
+          "target": "MasterDataObjectPage"
+        }
+      ],
+      "targets": {
+        "MasterDataList": {
+          "type": "Component",
+          "id": "MasterDataList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/MasterData",
+              "variantManagement": "Page",
+              "navigation": {
+                "MasterData": {
+                  "detail": {
+                    "route": "MasterDataObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  }
+                }
+              },
+              "initialLoad": "Enabled"
+            }
+          }
+        },
+        "MasterDataObjectPage": {
+          "type": "Component",
+          "id": "MasterDataObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/MasterData",
+              "content": {
+                "footer": {
+                  "actions": {
+                    "Submit": {
+                      "press": "masterdata1.ext.controller.Submit.Submit",
+                      "visible": true,
+                      "enabled": true,
+                      "text": "Submit"
+                    },
+                    "AuditLog": {
+                      "press": "masterdata1.ext.controller.AuditLog.AuditLog",
+                      "visible": true,
+                      "enabled": true,
+                      "text": "Audit Logs",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "Submit"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ObjectPage.ObjectPageController": {
+            "controllerName": "masterdata1.ext.controller.ObjectPage"
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "appr"
+  }
+}
