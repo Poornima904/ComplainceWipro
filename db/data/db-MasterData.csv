@@ -1,4 +1,0 @@
-RegID,Country,CompanyName,ListofDirectors,Admin,Comments,User,Status,Status_val
-ABC123,USA,Example Inc.,John mailto:doe,admin@example.com,Some comments,user1,Active,1
-DEF456,UK,Sample Co.,Jane mailto:smith,admin@sampleco.com,No comments,user2,Inactive,0
-GHI789,Canada,Test Corp.,Michael mailto:johnson,admin@testcorp.com,Additional comments,user3,Pending,2

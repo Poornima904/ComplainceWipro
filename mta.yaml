@@ -67,39 +67,9 @@ modules:
       build-result: resources
       requires:
         - artifacts:
-            - masterdatamasterdata.zip
-          name: masterdatamasterdata
-          target-path: resources/
-        - artifacts:
-            - complaince33.zip
-          name: complaince33
-          target-path: resources/
-        - artifacts:
             - masterdata1.zip
           name: masterdata1
           target-path: resources/
-  - name: masterdatamasterdata
-    type: html5
-    path: app/masterdata
-    build-parameters:
-      build-result: dist
-      builder: custom
-      commands:
-        - npm install
-        - npm run build:cf
-      supported-platforms:
-        []
-  - name: complaince33
-    type: html5
-    path: app/complaince33
-    build-parameters:
-      build-result: dist
-      builder: custom
-      commands:
-        - npm install
-        - npm run build:cf
-      supported-platforms:
-        []
   - name: masterdata1
     type: html5
     path: app/masterdata1

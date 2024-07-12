@@ -1,0 +1,38 @@
+<!-- <core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:macros="sap.fe.macros">
+	<VBox core:require="{ handler: 'masterdata1/ext/fragment/Insuranceattachments'}">
+		<Button text="Insuranceattachments" press="handler.onPress" />
+	</VBox>
+</core:FragmentDefinition> -->
+<core:FragmentDefinition xmlns:core="sap.ui.core"
+	xmlns="sap.m"
+	displayBlock="true"
+	xmlns:macros="sap.fe.macros"
+	xmlns:upload="sap.m.upload">
+	<VBox id = "revUploadVbox" class = "revAttachVBox">
+		<upload:UploadSet id="uploadSet" core:require="{ handler: 'masterdata1/ext/fragment/Insuranceattachments'}" instantUpload="false" uploadEnabled="true" showIcons="true" mode="None" afterItemAdded="handler.onAfterItemAdded" uploadCompleted="handler.onUploadCompleted" items="{
+								path: '/attach_policy_letter',
+								parameters: {
+									$orderby: 'createdAt desc'
+								},
+								templateShareable: false}">
+			<upload:toolbar>
+			</upload:toolbar>
+			<upload:items>
+				<upload:UploadSetItem id="ddd" fileName="{fileName}" mediaType="{mediaType}" url="{url}" thumbnailUrl="{
+								path: 'mediaType',
+								formatter: 'handler.formatThumbnailUrl'
+							}" enabledEdit="false" openPressed="handler.onOpenPressed" removePressed="handler.onRemovePressed">
+					<upload:attributes>
+						<ObjectAttribute id="dd" title="Uploaded By" text="{createdBy}" active="false" />
+						<ObjectAttribute id="dd22" title="Uploaded on" text="{createdAt}" active="false" />
+						<ObjectAttribute id="dddw2" title="File Type" text="{mediaType}" active="false" />
+						<ObjectAttribute id="dd22a" title="File Size" text="{size}" active="false" />
+					</upload:attributes>
+				</upload:UploadSetItem>
+			</upload:items>
+		</upload:UploadSet>
+	</VBox>
+
+
+
+</core:FragmentDefinition>

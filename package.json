@@ -10,6 +10,7 @@
         "@sap/cds-hana": "^2",
         "@sap/xsenv": "^5.1.0",
         "@sap/xssec": "^3",
+        "cors": "^2.8.5",
         "express": "^4",
         "passport": "^0.7.0"
     },
@@ -26,19 +27,18 @@
         "undeploy": "cf undeploy wiproCompilance --delete-services --delete-service-keys --delete-service-brokers",
         "build": "rimraf resources mta_archives && mbt build --mtar archive",
         "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
-        "watch-masterdata": "cds watch --open masterdata/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-complaince33": "cds watch --open complaince33/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-masterdata1": "cds watch --open masterdata1/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "cds": {
         "requires": {
             "auth": "dummy",
             "db": "hana"
+        },
+        "fiori": {
+            "bypass_draft": true
         }
     },
     "sapux": [
-        "app/masterdata",
-        "app/complaince33",
         "app/masterdata1"
     ]
 }

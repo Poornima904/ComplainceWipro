@@ -1,1 +1,0 @@
-{"version":3,"file":"Submit.js","names":["sap","ui","define","MessageToast","Submit","oEvent","show"],"sources":["Submit-dbg.js"],"mappings":"AAAAA,IAAIC,GAAGC,OAAO,CACV,sBACD,SAASC,GACR,aAEA,MAAO,CACHC,OAAQ,SAASC,GACbF,EAAaG,KAAK,0BACtB,EAER","ignoreList":[]}

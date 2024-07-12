@@ -1,0 +1,12 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:Link="sap.m.Link" xmlns:macros="sap.fe.macros">
+	<VBox id="vb1" core:require="{ handler: 'masterdata1/ext/fragment/ExtensionReq'}">
+	<Link id="lnk" text="Click Here to add Extension Date" press="handler.onlinkClick"/>
+		<VBox id="inputContainer">
+            <!-- Dynamic content will be added here -->
+        </VBox>
+		
+			
+		
+	</VBox>
+
+</core:FragmentDefinition>

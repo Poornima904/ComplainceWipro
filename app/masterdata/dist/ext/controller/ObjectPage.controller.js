@@ -1,2 +1,0 @@
-sap.ui.define(["sap/ui/core/mvc/ControllerExtension"],function(e){"use strict";return e.extend("masterdata.masterdata.ext.controller.ObjectPage",{override:{onInit:function(){debugger;var e=this.base.getExtensionAPI().getModel()},routing:{onBeforeBinding:async function(e){debugger}}}})});
-//# sourceMappingURL=ObjectPage.controller.js.map
