@@ -1,6 +1,6 @@
 <!-- <core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:macros="sap.fe.macros">
-	<VBox core:require="{ handler: 'masterdata1/ext/fragment/Insuranceattachments'}">
-		<Button text="Insuranceattachments" press="handler.onPress" />
+	<VBox core:require="{ handler: 'masterdata1/ext/fragment/Employeeattachments'}">
+		<Button text="Employeeattachments" press="handler.onPress" />
 	</VBox>
 </core:FragmentDefinition> -->
 <core:FragmentDefinition xmlns:core="sap.ui.core"
@@ -8,13 +8,13 @@
 	displayBlock="true"
 	xmlns:macros="sap.fe.macros"
 	xmlns:upload="sap.m.upload">
-	<VBox id = "revUploadVbox" class = "revAttachVBox">
-		<upload:UploadSet id="uploadSet" core:require="{ handler: 'masterdata1/ext/fragment/Insuranceattachments'}" instantUpload="false" uploadEnabled="true" showIcons="true" mode="None" afterItemAdded="handler.onAfterItemAdded" uploadCompleted="handler.onUploadCompleted" items="{
-								path: '/attach_policy_letter',
+	<VBox id = "revUploadVbox" class = "revAttachVBox" core:require="{ handler: 'masterdata1/ext/fragment/Employeeattachments'}">
+		<upload:UploadSet id="uploadSet" core:require="{ handler: 'masterdata1/ext/fragment/Employeeattachments'}" instantUpload="false" uploadEnabled="true" showIcons="true" mode="None" afterItemAdded="handler.onAfterItemAdded" uploadCompleted="handler.onUploadCompleted" items="{
+								path: '/EmployeeFiles',
 								parameters: {
 									$orderby: 'createdAt desc'
 								},
-								templateShareable: false}">
+								templateShareable: true}">
 			<upload:toolbar>
 			</upload:toolbar>
 			<upload:items>

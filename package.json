@@ -6,6 +6,8 @@
     "license": "UNLICENSED",
     "private": true,
     "dependencies": {
+        "@sap-cloud-sdk/connectivity": "^3.16.0",
+        "@sap-cloud-sdk/http-client": "^3.16.0",
         "@sap/cds": "^7",
         "@sap/cds-hana": "^2",
         "@sap/xsenv": "^5.1.0",
@@ -16,7 +18,7 @@
     },
     "devDependencies": {
         "@cap-js/sqlite": "^1",
-        "@sap/cds-dk": "^7",
+        "@sap/cds-dk": "^7.9.5",
         "@sap/eslint-plugin-cds": "^3",
         "@sap/ux-specification": "^1.120.13",
         "eslint": "^9",
@@ -31,6 +33,19 @@
     },
     "cds": {
         "requires": {
+            "wiproBPA": {
+                "kind": "odata-v2",
+                "csrf": true,
+                "csrfInBatch": true,
+                "credentials": {
+                    "destination": "wiproBPA",
+                    "requestTimeout": 120000
+                },
+                "destinationOptions": {
+                    "selectionStrategy": "alwaysProvider",
+                    "jwt": null
+                }
+            },
             "auth": "dummy",
             "db": "hana"
         },

@@ -1,5 +1,6 @@
 sap.ui.define(['sap/ui/core/mvc/ControllerExtension'], function (ControllerExtension) {
 	'use strict';
+	// var flag = false;
 
 	return ControllerExtension.extend('masterdata1.ext.controller.ObjectPage', {
 		// this section allows to extend lifecycle hooks or hooks provided by Fiori elements
@@ -12,63 +13,103 @@ sap.ui.define(['sap/ui/core/mvc/ControllerExtension'], function (ControllerExten
 			onInit: function () {
 				// you can access the Fiori elements extensionAPI via this.base.getExtensionAPI
 				var oModel = this.base.getExtensionAPI().getModel();
+
 			},
 			routing:
 			{
 				onBeforeBinding: async function (oEvent) {
+
 					debugger
-					// sap.ui.getCore().byId('masterdata1::MasterDataObjectPage--fe::FooterBar::StandardAction::Save').setVisible(false);
-					// sap.ui.getCore().byId('masterdata1::MasterDataObjectPage--fe::FooterBar::StandardAction::Save').setEnabled(false);
-					// var url = window.location.href;
-					// // The given URL
-
-					// // Extract the part of the URL after the #
-					// var hashIndex = url.indexOf('#');
-					// var hash = url.substring(hashIndex + 1);
-
-					// // Extract the query string part
-					// var queryString = hash.match(/\((.*)\)/)[1];
-
-					// // Split the query string into individual parameters
-					// var params = queryString.split(',');
-
-					// // Initialize variables to hold the extracted values
-					// var entity = null;
-					// var country = null;
-
-					// // Loop through each parameter and extract the values for Entity and Country
-					// params.forEach(param => {
-					// 	var [key, value] = param.split('=');
-					// 	value = value.replace(/'/g, ''); // Remove single quotes
-					// 	if (key === 'Entity') {
-					// 		entity = value;
-					// 	} else if (key === 'Country') {
-					// 		country = value;
-					// 	}
-					// });
-					// const testdata = JSON.stringify({
-					// 	entity: entity,
-					// 	country: country
-					// });
-					// const functionname = 'funcimport';
-					// const oFunction = this.getView().getModel().bindContext(`/${functionname}(...)`);
-					// oFunction.setParameter('data', testdata);
-					// oFunction.setParameter('status', JSON.stringify({ status: 'getmasterstatus' }));
-					// await oFunction.execute();
-					// const context = oFunction.getBoundContext().getValue();
-					// let result = context.value;
-					// result = JSON.parse(result);
-					// var status = result[0].Statusnew;
-					// if (status != "Approved") {
-					// 	sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FacetSubSection::Complaince").setVisible(false)
-					// 	sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments").setVisible(false)
-					// 	sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FacetSubSection::Insurance").setVisible(false)
+					// if (flag) {
+					// 	return;
 					// }
-					// else{
-					// 	sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FacetSubSection::Complaince").setVisible(true)
-					// 	sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments").setVisible(true)
-					// 	sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FacetSubSection::Insurance").setVisible(true)
-					// }
+
+
+					try {
+						var url = window.location.href;
+						var match = url.match(/Masterdataid='([^']+)'/);
+						var masterdataid = match ? match[1] : null;
+
+						const testdata = JSON.stringify({
+							id: masterdataid
+						});
+						const functionname = 'funcimport';
+						const oFunction = this.getView().getModel().bindContext(`/${functionname}(...)`);
+						oFunction.setParameter('data', testdata);
+						oFunction.setParameter('status', JSON.stringify({ status: 'getmasterstatus' }));
+						await oFunction.execute();
+						const context = oFunction.getBoundContext().getValue();
+						let result = context.value;
+						result = JSON.parse(result);
+						if (result.length != '0') {
+							var status = result[0].Statusnew;
+							if (status == "Approved") {
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FacetSubSection::Complaince1").setVisible(true)
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments").setVisible(true)
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FacetSubSection::Insurance").setVisible(true)
+							}
+							else {
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FacetSubSection::Complaince1").setVisible(false)
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments").setVisible(false)
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FacetSubSection::Insurance").setVisible(false);
+							}
+							if (status == "Pending for Approval" || status == "Approved") {
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FooterBar::CustomAction::Submit").setEnabled(false);
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FooterBar::CustomAction::Submit").setVisible(false);
+							}
+							var url = window.location.href;
+							var match = url.match(/IsActiveEntity=([^)]*)/);
+							var isActiveEntity = match ? match[1] : null;
+
+							if (status == "Pending for Approval" || isActiveEntity == "false") {
+								//edit buttonn hiding
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::StandardAction::Edit").setEnabled(false);
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::StandardAction::Edit").setVisible(false);
+
+							} else {
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::StandardAction::Edit").setEnabled(true);
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::StandardAction::Edit").setVisible(true);
+							}
+							if (isActiveEntity == "false") {
+								// unhiding upload
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet").setUploadButtonInvisible(false);
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet").setUploadEnabled(true);
+								// unhiding edit and remove for attachments
+								var items = sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet").getItems();
+								for (let i = 0; i < items.length; i++) {
+									items[i].setVisibleRemove(true);
+									items[i].setVisibleEdit(true);
+
+								}
+							}
+							else {
+								// hiding upload
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet").setUploadButtonInvisible(true);
+								sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet").setUploadEnabled(false);
+								// hiding edit and remove for attachments
+								var items = sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet").getItems();
+								for (let i = 0; i < items.length; i++) {
+									items[i].setVisibleRemove(false);
+									items[i].setVisibleEdit(false);
+
+								}
+							}
+						}
+						else {
+							sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FacetSubSection::Complaince1").setVisible(false)
+							sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments").setVisible(false)
+							sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FacetSubSection::Insurance").setVisible(false)
+
+							sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FooterBar::CustomAction::Submit").setEnabled(false);
+							sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FooterBar::CustomAction::Submit").setVisible(false);
+
+						}
+
+					}
+					catch (error) {
+
+					}
+
 
 				}
 			},
@@ -80,20 +121,46 @@ sap.ui.define(['sap/ui/core/mvc/ControllerExtension'], function (ControllerExten
 				},
 				onBeforeEdit: function (oEvent) {
 					debugger
+					// flag = true;
 					//hiding submit button
 					sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FooterBar::CustomAction::Submit").setEnabled(false);
 					sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FooterBar::CustomAction::Submit").setVisible(false);
+					// unhiding upload
+					sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet").setUploadButtonInvisible(false);
+					sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet").setUploadEnabled(true);
+					// unhiding edit and remove for attachments
+					var items = sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet").getItems();
+					for (let i = 0; i < items.length; i++) {
+						items[i].setVisibleRemove(true);
+						items[i].setVisibleEdit(true);
+
+					}
+
 				},
 				onAfterCreate: function (oEvent) {
 					debugger
 					sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FooterBar::CustomAction::Submit").setEnabled(false);
 					sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FooterBar::CustomAction::Submit").setVisible(false);
-					// sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FacetSubSection::Complaince").setVisible(false)
-					// sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments").setVisible(false)
-					// sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::FacetSubSection::Insurance").setVisible(false)
+
 				},
-				onAfterSave: function (oEvent) {
+				onAfterSave: async function (oEvent) {
 					debugger
+					// hiding upload
+					sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet").setUploadButtonInvisible(true);
+					sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet").setUploadEnabled(false);
+					// hiding edit and remove for attachments
+					var items = sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet").getItems();
+					for (let i = 0; i < items.length; i++) {
+						items[i].setVisibleRemove(false);
+						items[i].setVisibleEdit(false);
+
+					}
+					let funcname1 = "bpaTrigger";
+					let oFunc1 = this.getView().getModel().bindContext(`/${funcname1}(...)`);
+
+					let funcname = "updateStatus";
+					let oFunc = this.getView().getModel().bindContext(`/${funcname}(...)`);
+
 					let d = new sap.m.Dialog({
 						title: "Success",
 						type: "Message",
@@ -105,21 +172,23 @@ sap.ui.define(['sap/ui/core/mvc/ControllerExtension'], function (ControllerExten
 							text: "Yes",
 							press: async function (oEvent, oPath) {
 								debugger
-								d.close();
-								// const url = window.location.href;
-								// function getRegID(url) {
-								// 	const match = url.match(/RegID='([^']+)'/);
-								// 	return match ? match[1] : null;
-								// }
-								// const id = getRegID(url);
+								var url = window.location.href;
+								var match = url.match(/Masterdataid='([^']+)'/);
+								var masterdataid = match ? match[1] : null;
+								var admin = "avaneesh.u@peolsolutions.com";
 
-								// var href_For_Product_display = (sap.ushell && sap.ushell.Container && await sap.ushell.Container.getServiceAsync("Navigation")) || "";
-								// if (href_For_Product_display != "") {
-								// 	await href_For_Product_display.navigate({
-								// 		target: { semanticObject: "ReportEntity", action: "display" },
-								// 		params: { "RegID": id }
-								// 	});
-								// }
+								//for updating status
+								oFunc.setParameter('Masterdataid', masterdataid)
+								await oFunc.execute();
+
+								//for triggering bpa 
+								oFunc1.setParameter('Masterdataid', masterdataid)
+								oFunc1.setParameter('Admin', admin)
+								await oFunc1.execute();
+
+								window.location.reload();
+								window.history.back();
+								d.close();
 							}
 						}),
 						endButton: new sap.m.Button({
@@ -134,7 +203,15 @@ sap.ui.define(['sap/ui/core/mvc/ControllerExtension'], function (ControllerExten
 							}
 						})
 					});
+					// flag = false;
 					d.open();
+				},
+				onAfterDiscard: async function (oEvent) {
+					debugger
+					// flag = false;
+				},
+				onBeforeDiscard: function (oEvent) {
+					debugger
 				}
 
 			}

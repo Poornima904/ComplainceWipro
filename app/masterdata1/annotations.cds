@@ -25,8 +25,8 @@ annotate service.MasterData with @(
         {
             $Type : 'UI.ReferenceFacet',
             Label : 'Complaince',
-            ID : 'Complaince',
-            Target : 'master_compliance/@UI.LineItem#Complaince',
+            ID : 'Complaince1',
+            Target : 'toCompliance/@UI.LineItem#Complaince1',
         },
         {
             $Type : 'UI.CollectionFacet',
@@ -62,10 +62,6 @@ annotate service.MasterData with @(
                 Label : 'Entity',
             },{
                 $Type : 'UI.DataField',
-                Value : Status,
-                Label : 'Status',
-            },{
-                $Type : 'UI.DataField',
                 Value : User,
                 Label : 'User',
             },{
@@ -84,13 +80,15 @@ annotate service.MasterData with @(
                 $Type : 'UI.DataField',
                 Value : Admin,
                 Label : 'Admin',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : Statusnew,
+                Label : 'Status',
             },],
     }
 );
 
-annotate service.MasterData with {
-    Status @Common.FieldControl : #ReadOnly
-};
 annotate service.insuranceLiability with @(
     UI.LineItem #Liability : [
         {
@@ -167,7 +165,7 @@ annotate service.insuranceLiability with @(
         Data : [
             {
                 $Type : 'UI.DataField',
-                Value : id,
+                Value : idliability,
                 Label : 'id',
             },{
                 $Type : 'UI.DataField',
@@ -217,7 +215,7 @@ annotate service.insuranceEmployee with @(
                 Label : 'enter_premium',
             },{
                 $Type : 'UI.DataField',
-                Value : id,
+                Value : idemployee,
                 Label : 'id',
             },{
                 $Type : 'UI.DataField',
@@ -267,7 +265,7 @@ annotate service.insuranceProperty with @(
                 Label : 'Entity',
             },{
                 $Type : 'UI.DataField',
-                Value : id,
+                Value : idproperty,
                 Label : 'id',
             },{
                 $Type : 'UI.DataField',
@@ -522,10 +520,6 @@ annotate service.Compliance with @(
                 Label : 'ExtensionDate',
             },{
                 $Type : 'UI.DataField',
-                Value : Status,
-                Label : 'Status',
-            },{
-                $Type : 'UI.DataField',
                 Value : year,
                 Label : 'year',
             },],
@@ -666,3 +660,49 @@ annotate service.insuranceProperty with {
         },
         Common.ValueListWithFixedValues : true
 )};
+
+annotate service.MasterData with @(
+    UI.HeaderInfo : {
+        TypeName : '',
+        TypeNamePlural : '',
+    }
+);
+annotate service.Compliance with @(
+    UI.LineItem #Complaince1 : [
+        {
+            $Type : 'UI.DataField',
+            Value : year,
+            Label : 'year',
+        },{
+            $Type : 'UI.DataField',
+            Value : Entity,
+            Label : 'Entity',
+        },]
+);
+annotate service.insuranceLiability with @(
+    UI.HeaderInfo : {
+        TypeName : '',
+        TypeNamePlural : '',
+    }
+);
+annotate service.insuranceEmployee with @(
+    UI.HeaderInfo : {
+        TypeName : '',
+        TypeNamePlural : '',
+    }
+);
+annotate service.insuranceProperty with @(
+    UI.HeaderInfo : {
+        TypeName : '',
+        TypeNamePlural : '',
+    }
+);
+annotate service.Compliance with @(
+    UI.HeaderInfo : {
+        TypeName : '',
+        TypeNamePlural : '',
+    }
+);
+annotate service.MasterData with {
+    Statusnew @Common.FieldControl : #ReadOnly
+};

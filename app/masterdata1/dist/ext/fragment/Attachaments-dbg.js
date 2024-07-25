@@ -1,20 +1,20 @@
 sap.ui.define([
-    "sap/m/MessageToast",
+	"sap/m/MessageToast",
 	"sap/ui/webc/main/TreeItem"
-], function(MessageToast,TreeItem) {
-    'use strict';
-    var that = this;
+], function (MessageToast, TreeItem) {
+	'use strict';
+	var that = this;
 	var extractedNumber;
 	var dialogOpen;
 	var type;
 	var foldername;
 	var baseuri;
 
-    return {
-        onPress: function(oEvent) {
-            MessageToast.show("Custom handler invoked.");
-        },
-        onAfterItemAdded: function (oEvent) {
+	return {
+		onPress: function (oEvent) {
+			MessageToast.show("Custom handler invoked.");
+		},
+		onAfterItemAdded: async function (oEvent) {
 			debugger
 			var baseuri = oEvent.oSource.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().oContainer.getParent().getParent().getParent().getManifestObject()._oBaseUri._string;
 			var item = oEvent.getParameter("item");
@@ -49,7 +49,8 @@ sap.ui.define([
 							debugger
 							cdialog.close();
 							// var incomplete_items = sap.ui.getCore().byId("vobscreen3::VOB_Screen3ObjectPage--fe::CustomSubSection::Attachments--11").destroyIncompleteItems();
-							sap.ui.getCore().byId("vobscreen4::VOB_Screen4ObjectPage--fe::CustomSubSection::Attachments--11").mAggregations.items[1].destroyIncompleteItems(); cdialog.destroyContent();
+							sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments").mAggregations._grid.mAggregations.content[0].mAggregations.content.mAggregations.items[0].destroyIncompleteItems();
+							cdialog.destroyContent();
 							dialogOpen = false; // Reset the flag when dialog is closed
 						},
 
@@ -63,7 +64,7 @@ sap.ui.define([
 							if (foldername === "Click on the folder to select path") {
 								var oMessageBox = sap.m.MessageBox.warning("No folder selected.", {
 									title: "Warning",
-									onClose: function() {
+									onClose: function () {
 										oMessageBox.close();
 										debugger;
 									}
@@ -71,63 +72,65 @@ sap.ui.define([
 							}
 
 							else {
-														
-							debugger
-							var _createEntity = function (item) {
+
 								debugger
-								var data = {
-									mediaType: item.getMediaType(),
-									fileName: item.getFileName(),
-									// size: item.getFileObject().size,
-									Folder: foldername,
-
-								};
-
-								var settings = {
-									// url: baseuri + "odata/v4/my/NewFiles",
-									url: "/odata/v4/my/NewFiles",
-									method: "POST",
-									headers: {
-										"Content-type": "application/json"
-									},
-									data: JSON.stringify(data)
-								};
-
-								return new Promise((resolve, reject) => {
-									$.ajax(settings)
-										.done((results, textStatus, request) => {
-											resolve(results.ID);
-										})
-										.fail((err) => {
-											reject(err);
-										});
-								});
-							};
-
-							_createEntity(item)
-								.then((id) => {
+								var _createEntity = function (item) {
 									debugger
-									// var url = 
-									// baseuri + `odata/v4/my/NewFiles(${id})/content`;
-									var url = `/odata/v4/my/NewFiles(${id})/content`;
-									item.setUploadUrl(url);
-									cdialog.close();
-									cdialog.destroyContent();
-									dialogOpen = false;
-									// var oUploadSet = this.byId("uploadSet");
-									var oUploadSet = sap.ui.getCore().byId("reportentity::MasterDataObjectPage--fe::CustomSubSection::AddKeyAttachments--uploadSet") //.mAggregations.items[1];
-									oUploadSet.setHttpRequestMethod("PUT");
-									oUploadSet.uploadItem(item);
-								})
-								.catch((err) => {
-									console.log(err);
-								});
-							debugger
+									var bPath = item.getBindingContext().sPath;
+									var data = {
+										mediaType: item.getMediaType(),
+										fileName: item.getFileName(),
+										// size: item.getFileObject().size,
+										Folder: foldername,
+										IsActiveEntity: false
+									};
+
+									var settings = {
+
+										// url: baseuri + "odata/v4/my" + bPath + "/master_newfiles",
+
+										url: "/odata/v4/my" + bPath + "/master_newfiles",
+										method: "POST",
+										headers: {
+											"Content-type": "application/json"
+										},
+										data: JSON.stringify(data)
+									};
+
+									return new Promise((resolve, reject) => {
+										$.ajax(settings)
+											.done((results, textStatus, request) => {
+												resolve(results.ID);
+											})
+											.fail((err) => {
+												reject(err);
+											});
+									});
+								};
+
+								_createEntity(item)
+									.then((id) => {
+										debugger
+										// var url = baseuri + `odata/v4/my/NewFiles(ID=${id},IsActiveEntity=false)/content`;
+										var url = `/odata/v4/my/NewFiles(ID=${id},IsActiveEntity=false)/content`;
+										item.setUploadUrl(url);
+										cdialog.close();
+										cdialog.destroyContent();
+										dialogOpen = false;
+										// var oUploadSet = this.byId("uploadSet");
+										var oUploadSet = sap.ui.getCore().byId("masterdata1::MasterDataObjectPage--fe::CustomSubSection::Attachaments--uploadSet") //.mAggregations.items[1];
+										oUploadSet.setHttpRequestMethod("PUT");
+										oUploadSet.uploadItem(item);
+									})
+									.catch((err) => {
+										console.log(err);
+									});
+								debugger
+							}
 						}
-					}
 					})
 
-					
+
 				});
 
 				// Add VBox for content
@@ -165,128 +168,128 @@ sap.ui.define([
 
 				var vb1 = new sap.m.VBox("vb1");
 				vb1.addItem(
-					new sap.m.Tree("treee", {
-						itemPress: async function (params) {
-							let selectedItem = params.mParameters.item;
-							let path = '';
-							let currentFolder = selectedItem;
+					// new sap.m.Tree("treee", {
+					// 	itemPress: async function (params) {
+					// 		let selectedItem = params.mParameters.item;
+					// 		let path = '';
+					// 		let currentFolder = selectedItem;
 
-							// Traverse up the hierarchy and construct the path
-							while (currentFolder && currentFolder.getId() !== 'treee') {
-								// Get the icon and name of the current folder
-								// let icon = currentFolder.getIcon();
-								let name = currentFolder.getText();
+					// 		// Traverse up the hierarchy and construct the path
+					// 		while (currentFolder && currentFolder.getId() !== 'treee') {
+					// 			// Get the icon and name of the current folder
+					// 			// let icon = currentFolder.getIcon();
+					// 			let name = currentFolder.getText();
 
-								// Construct the path by adding the icon and name
-								path = `${name} / ${path}`;
+					// 			// Construct the path by adding the icon and name
+					// 			path = `${name} / ${path}`;
 
-								// Move to the parent folder
-								currentFolder = currentFolder.getParent();
-							}
+					// 			// Move to the parent folder
+					// 			currentFolder = currentFolder.getParent();
+					// 		}
 
-							// Set the footer text with the constructed path
-							sap.ui.getCore().byId("treee").setFooterText(path);
-						},
-						footerText: "Click on the folder to select path",
-						headerText: "Folders",
-						//=======================Folder1========================
-						items: [
-							new sap.m.CustomTreeItem("folder_1", {
-								// icon: "sap-icon://folder-full",
-								// title: "Part No",
-                                counter: 1,
-				
-								//=======================Vendor 1========================
-								content: [
-									new sap.m.CustomTreeItem("folder_2", {
-										// icon: "sap-icon://folder-full",
-										// title: "Vendor 1",
-                                        counter:2,
-				
-										// Nested folders under Vendor 1
-										content: [
-											new sap.m.StandardTreeItem("folder_2.1", {
-												icon: "sap-icon://folder-full",
-												title: "NDA",
-											}),
-											new sap.m.StandardTreeItem("folder_2.2", {
-												icon: "sap-icon://folder-full",
-												title: "RFQ",
-											}),
+					// 		// Set thje footer text with the constructed path
+					// 		sap.ui.getCore().byId("treee").setFooterText(path);
+					// 	},
+					// 	footerText: "Click on the folder to select path",
+					// 	headerText: "Folders",
+					// 	//=======================Folder1========================
+					// 	// items: [
+					// 	// 	new sap.m.CustomTreeItem("folder_1", {
+					// 	// 		// icon: "sap-icon://folder-full",
+					// 	// 		// title: "Part No",
+					//     //         counter: 1,
 
-											new sap.m.StandardTreeItem("folder_2.3", {
-												icon: "sap-icon://folder-full",
-												title: "Quote and Quote Synthesis",
-											}),
+					// 	// 		//=======================Vendor 1========================
+					// 	// 		content: [
+					// 	// 			new sap.m.CustomTreeItem("folder_2", {
+					// 	// 				// icon: "sap-icon://folder-full",
+					// 	// 				// title: "Vendor 1",
+					//     //                 counter:2,
 
-											new sap.m.StandardTreeItem("folder_2.4", {
-												icon: "sap-icon://folder-full",
-												title: "Quote Backup",
-											}),
-											
-											new sap.m.StandardTreeItem("folder_2.5", {
-                                                icon: "sap-icon://folder-full",
-                                                title: "Supplier Details",
-											}),
-											new sap.m.StandardTreeItem("folder_2.6", {
-												icon: "sap-icon://folder-full",
-												title: "Offer price Approval from Bazzar Sales Team",
-											}),
-											new sap.m.CustomTreeItem("folder_2.7", {
-												// icon: "sap-icon://folder-full",
-												// title: "SBU VOB FORUM",
-                                                counter:3,
+					// 	// 				// Nested folders under Vendor 1
+					// 	// 				content: [
+					// 	// 					new sap.m.StandardTreeItem("folder_2.1", {
+					// 	// 						icon: "sap-icon://folder-full",
+					// 	// 						title: "NDA",
+					// 	// 					}),
+					// 	// 					new sap.m.StandardTreeItem("folder_2.2", {
+					// 	// 						icon: "sap-icon://folder-full",
+					// 	// 						title: "RFQ",
+					// 	// 					}),
 
-												content: [
-													new sap.m.StandardTreeItem("folder_2.7.1", {
-														icon: "sap-icon://folder-2",
-														title: "PPT",
-													}),
-													new sap.m.StandardTreeItem("folder_9.2", {
-														icon: "sap-icon://folder-2",
-														title: "Backup data",
-													}),
-													new sap.m.StandardTreeItem("folder_9.3", {
-														icon: "sap-icon://folder-2",
-														title: "Approval",
-													})
-												]
-											}),
-											new sap.m.StandardTreeItem("folder_2.8", {
-												icon: "sap-icon://folder-full",
-												title: "Vendor Code Creation",
-											}),
-											new sap.m.StandardTreeItem("folder_2.9", {
-												icon: "sap-icon://folder-full",
-												title: "NDA sign-off with Packagign Supplier",
-											}),
-											new sap.m.StandardTreeItem("folder_3.0", {
-												icon: "sap-icon://folder-full",
-												title: "Packaging Sign-offr",
-											}),
-											new sap.m.StandardTreeItem("folder_3.1", {
-												icon: "sap-icon://folder-full",
-												title: "Proposed and Approved Drawings",
-											}),
-											new sap.m.StandardTreeItem("folder_3.2", {
-												icon: "sap-icon://folder-full",
-												title: "Validation Reports",
-											}),
-											new sap.m.StandardTreeItem("folder_3.3", {
-												icon: "sap-icon://folder-full",
-												title: "Final Drawing Approval for Production",
-											}),
-											new sap.m.StandardTreeItem("folder_3.4", {
-												icon: "sap-icon://folder-full",
-												title: "VPPAP",
-											})
-										]
-									})
-								]
-							})
-						]
-					}),
-                    new sap.ui.webc.main.Tree("treee", {
+					// 	// 					new sap.m.StandardTreeItem("folder_2.3", {
+					// 	// 						icon: "sap-icon://folder-full",
+					// 	// 						title: "Quote and Quote Synthesis",
+					// 	// 					}),
+
+					// 	// 					new sap.m.StandardTreeItem("folder_2.4", {
+					// 	// 						icon: "sap-icon://folder-full",
+					// 	// 						title: "Quote Backup",
+					// 	// 					}),
+
+					// 	// 					new sap.m.StandardTreeItem("folder_2.5", {
+					//     //                         icon: "sap-icon://folder-full",
+					//     //                         title: "Supplier Details",
+					// 	// 					}),
+					// 	// 					new sap.m.StandardTreeItem("folder_2.6", {
+					// 	// 						icon: "sap-icon://folder-full",
+					// 	// 						title: "Offer price Approval from Bazzar Sales Team",
+					// 	// 					}),
+					// 	// 					new sap.m.CustomTreeItem("folder_2.7", {
+					// 	// 						// icon: "sap-icon://folder-full",
+					// 	// 						// title: "SBU VOB FORUM",
+					//     //                         counter:3,
+
+					// 	// 						content: [
+					// 	// 							new sap.m.StandardTreeItem("folder_2.7.1", {
+					// 	// 								icon: "sap-icon://folder-2",
+					// 	// 								title: "PPT",
+					// 	// 							}),
+					// 	// 							new sap.m.StandardTreeItem("folder_9.2", {
+					// 	// 								icon: "sap-icon://folder-2",
+					// 	// 								title: "Backup data",
+					// 	// 							}),
+					// 	// 							new sap.m.StandardTreeItem("folder_9.3", {
+					// 	// 								icon: "sap-icon://folder-2",
+					// 	// 								title: "Approval",
+					// 	// 							})
+					// 	// 						]
+					// 	// 					}),
+					// 	// 					new sap.m.StandardTreeItem("folder_2.8", {
+					// 	// 						icon: "sap-icon://folder-full",
+					// 	// 						title: "Vendor Code Creation",
+					// 	// 					}),
+					// 	// 					new sap.m.StandardTreeItem("folder_2.9", {
+					// 	// 						icon: "sap-icon://folder-full",
+					// 	// 						title: "NDA sign-off with Packagign Supplier",
+					// 	// 					}),
+					// 	// 					new sap.m.StandardTreeItem("folder_3.0", {
+					// 	// 						icon: "sap-icon://folder-full",
+					// 	// 						title: "Packaging Sign-offr",
+					// 	// 					}),
+					// 	// 					new sap.m.StandardTreeItem("folder_3.1", {
+					// 	// 						icon: "sap-icon://folder-full",
+					// 	// 						title: "Proposed and Approved Drawings",
+					// 	// 					}),
+					// 	// 					new sap.m.StandardTreeItem("folder_3.2", {
+					// 	// 						icon: "sap-icon://folder-full",
+					// 	// 						title: "Validation Reports",
+					// 	// 					}),
+					// 	// 					new sap.m.StandardTreeItem("folder_3.3", {
+					// 	// 						icon: "sap-icon://folder-full",
+					// 	// 						title: "Final Drawing Approval for Production",
+					// 	// 					}),
+					// 	// 					new sap.m.StandardTreeItem("folder_3.4", {
+					// 	// 						icon: "sap-icon://folder-full",
+					// 	// 						title: "VPPAP",
+					// 	// 					})
+					// 	// 				]
+					// 	// 			})
+					// 	// 		]
+					// 	// 	})
+					// 	// ]
+					// }),
+					new sap.ui.webc.main.Tree("treee", {
 						itemClick: async function (params) {
 							let selectedItem = params.mParameters.item;
 							let path = '';
@@ -314,97 +317,123 @@ sap.ui.define([
 						items: [
 							new TreeItem("folder_1", {
 								icon: "sap-icon://folder-full",
-								text: "Part No",
-				
+								text: "Main Floder",
+
+
 								//=======================Vendor 1========================
 								items: [
-									new TreeItem("folder_2", {
+									new TreeItem("folder_1.1", {
 										icon: "sap-icon://folder-full",
-										text: "Vendor 1",
-				
+										text: "Attachment 1",
+
 										// Nested folders under Vendor 1
-										items: [
-											new TreeItem("folder_2.1", {
-												icon: "sap-icon://folder-full",
-												text: "NDA",
-											}),
-											new TreeItem("folder_2.2", {
-												icon: "sap-icon://folder-full",
-												text: "RFQ",
-											}),
 
-											new TreeItem("folder_2.3", {
-												icon: "sap-icon://folder-full",
-												text: "Quote and Quote Synthesis",
-											}),
+									}),
+									new TreeItem("folder_1.2", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 2",
 
-											new TreeItem("folder_2.4", {
-												icon: "sap-icon://folder-full",
-												text: "Quote Backup",
-											}),
-											
-											new TreeItem("folder_2.5", {
-                                                icon: "sap-icon://folder-full",
-                                                text: "Supplier Details",
-											}),
-											new TreeItem("folder_2.6", {
-												icon: "sap-icon://folder-full",
-												text: "Offer price Approval from Bazzar Sales Team",
-											}),
-											new TreeItem("folder_2.7", {
-												icon: "sap-icon://folder-full",
-												text: "SBU VOB FORUM",
+										// Nested folders under Vendor 1
 
-												items: [
-													new TreeItem("folder_2.7.1", {
-														icon: "sap-icon://folder-2",
-														text: "PPT",
-													}),
-													new TreeItem("folder_9.2", {
-														icon: "sap-icon://folder-2",
-														text: "Backup data",
-													}),
-													new TreeItem("folder_9.3", {
-														icon: "sap-icon://folder-2",
-														text: "Approval",
-													})
-												]
-											}),
-											new TreeItem("folder_2.8", {
-												icon: "sap-icon://folder-full",
-												text: "Vendor Code Creation",
-											}),
-											new TreeItem("folder_2.9", {
-												icon: "sap-icon://folder-full",
-												text: "NDA sign-off with Packagign Supplier",
-											}),
-											new TreeItem("folder_3.0", {
-												icon: "sap-icon://folder-full",
-												text: "Packaging Sign-offr",
-											}),
-											new TreeItem("folder_3.1", {
-												icon: "sap-icon://folder-full",
-												text: "Proposed and Approved Drawings",
-											}),
-											new TreeItem("folder_3.2", {
-												icon: "sap-icon://folder-full",
-												text: "Validation Reports",
-											}),
-											new TreeItem("folder_3.3", {
-												icon: "sap-icon://folder-full",
-												text: "Final Drawing Approval for Production",
-											}),
-											new TreeItem("folder_3.4", {
-												icon: "sap-icon://folder-full",
-												text: "VPPAP",
-											})
-										]
+									}),
+									new TreeItem("folder_1.3", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 3",
+
+										// Nested folders under Vendor 1
+
+									}),
+									new TreeItem("folder_1.4", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 4",
+
+										// Nested folders under Vendor 1
+
+									}),
+									new TreeItem("folder_1.5", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 5",
+
+										// Nested folders under Vendor 1
+
+									}),
+									new TreeItem("folder_1.6", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 6",
+
+										// Nested folders under Vendor 1
+
+									}),
+									new TreeItem("folder_1.7", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 7",
+
+										// Nested folders under Vendor 1
+
+									}),
+									new TreeItem("folder_1.8", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 8",
+										additionalText: "✔️",
+										// Nested folders under Vendor 1
+
+									}),
+									new TreeItem("folder_1.9", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 9",
+
+										// Nested folders under Vendor 1
+
+									}),
+									new TreeItem("folder_1.10", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 10",
+
+										// Nested folders under Vendor 1
+
+									}),
+									new TreeItem("folder_1.11", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 11",
+
+										// Nested folders under Vendor 1
+
+									}),
+									new TreeItem("folder_1.12", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 12",
+
+										// Nested folders under Vendor 1
+
+									}),
+									new TreeItem("folder_1.13", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 13",
+
+										// Nested folders under Vendor 1
+
+									}),
+									new TreeItem("folder_1.14", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 14",
+
+										// Nested folders under Vendor 1
+
+									}),
+									new TreeItem("folder_1.15", {
+										icon: "sap-icon://folder-full",
+										text: "Attachment 15",
+
+										// Nested folders under Vendor 1
+
 									})
 								]
-							})
+							}),
+
+
 						]
 					})
-					
+
 				);
 
 
@@ -465,6 +494,47 @@ sap.ui.define([
 				// 				});
 
 				// contentVBox.addItem(treeTable);
+
+				const functionname = 'funcimport';
+				const oFunction = this._view.getModel().bindContext(`/${functionname}(...)`);
+				debugger
+				var url = window.location.href;
+				var match = url.match(/Masterdataid='([^']+)'/);
+				var masterdataid = match ? match[1] : null;
+				const testdata = JSON.stringify({
+					id: masterdataid
+				});
+				
+				oFunction.setParameter('data', testdata);
+				oFunction.setParameter('status', JSON.stringify({ status: 'getattachmentskey' }));
+				await oFunction.execute();
+				const context = oFunction.getBoundContext().getValue();
+				let result = context.value;
+				result = JSON.parse(result);
+				var foldernam = [];
+				for (var a = 0; a < result.length; a++) {
+					var folder = result[a].Folder;
+					var match = folder.match(/\/\s*(Attachment \d+)\s*\//);
+					if (match) {
+						foldernam.push(match[1]);
+					}
+				}
+				var ok = "✔️";
+				var notok = "❌"
+				var items = vb1.mAggregations.items[0].mAggregations.items[0].mAggregations.items;
+				for (var b = 0; b < items.length; b++) {
+					var name = items[b].mProperties.text;
+
+					// Check if the name is in the foldernam array
+					if (foldernam.includes(name)) {
+						// Perform the action if a match is found
+						items[b].setAdditionalText(ok);
+					}
+					else {
+						items[b].setAdditionalText(notok);
+					}
+				}
+
 
 				cdialog.addContent(contentVBox);
 				cdialog.addContent(vb1);
@@ -650,13 +720,21 @@ sap.ui.define([
 			// 	}
 			// 	return iconUrl;
 		},
-        onUploadCompleted: function (oEvent) {
+		onUploadCompleted: function (oEvent) {
 			debugger;
 			var oUploadSet = this.byId("uploadSet");
 			oUploadSet.removeAllIncompleteItems();
 			oUploadSet.getBinding("items").refresh();
 		},
-        formatThumbnailUrl: function (mediaType) {
+		onRemovePressed: function (oEvent) {
+			debugger;
+			oEvent.preventDefault();
+			oEvent.getParameter("item").getBindingContext().delete();
+			// MessageToast.show("Selected file has been deleted");
+			// oEvent.getParameter("item").destroy();
+
+		},
+		formatThumbnailUrl: function (mediaType) {
 			debugger
 			var iconUrl;
 			switch (mediaType) {
@@ -680,5 +758,5 @@ sap.ui.define([
 			}
 			return iconUrl;
 		}
-    };
+	};
 });

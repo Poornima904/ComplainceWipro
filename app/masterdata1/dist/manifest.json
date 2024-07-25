@@ -71,7 +71,8 @@
                 "sap.ui.core": {},
                 "sap.ushell": {},
                 "sap.fe.templates": {},
-                "sap.suite.ui.commons": {}
+                "sap.suite.ui.commons": {},
+                "sap.ui.webc.main": {}
             }
         },
         "contentDensities": {
@@ -116,11 +117,6 @@
                     "target": "MasterDataObjectPage"
                 },
                 {
-                    "pattern": "MasterData({key})/master_compliance({key2}):?query:",
-                    "name": "MasterData_master_complianceObjectPage",
-                    "target": "MasterData_master_complianceObjectPage"
-                },
-                {
                     "pattern": "MasterData({key})/master_Iliability({key2}):?query:",
                     "name": "MasterData_master_IliabilityObjectPage",
                     "target": "MasterData_master_IliabilityObjectPage"
@@ -134,6 +130,11 @@
                     "pattern": "MasterData({key})/master_IProperty({key2}):?query:",
                     "name": "MasterData_master_IPropertyObjectPage",
                     "target": "MasterData_master_IPropertyObjectPage"
+                },
+                {
+                    "pattern": "MasterData({key})/toCompliance({key2}):?query:",
+                    "name": "MasterData_toComplianceObjectPage",
+                    "target": "MasterData_toComplianceObjectPage"
                 }
             ],
             "targets": {
@@ -169,7 +170,6 @@
                     "name": "sap.fe.templates.ObjectPage",
                     "options": {
                         "settings": {
-                            "editableHeaderContent": false,
                             "contextPath": "/MasterData",
                             "content": {
                                 "footer": {
@@ -188,7 +188,7 @@
                                             "template": "masterdata1.ext.fragment.Attachaments",
                                             "position": {
                                                 "placement": "After",
-                                                "anchor": "Complaince"
+                                                "anchor": "Complaince1"
                                             },
                                             "title": "Key Attachments"
                                         }
@@ -199,22 +199,17 @@
                                         "auditlogs": {
                                             "press": "masterdata1.ext.controller.Auditlogs.auditlogs",
                                             "visible": true,
-                                            "enabled": true,
                                             "text": "Audit Logs",
                                             "position": {
                                                 "placement": "Before",
                                                 "anchor": "EditAction"
-                                            }
+                                            },
+                                            "enabled": true
                                         }
                                     }
                                 }
                             },
                             "navigation": {
-                                "master_compliance": {
-                                    "detail": {
-                                        "route": "MasterData_master_complianceObjectPage"
-                                    }
-                                },
                                 "master_Iliability": {
                                     "detail": {
                                         "route": "MasterData_master_IliabilityObjectPage"
@@ -229,18 +224,126 @@
                                     "detail": {
                                         "route": "MasterData_master_IPropertyObjectPage"
                                     }
+                                },
+                                "toCompliance": {
+                                    "detail": {
+                                        "route": "MasterData_toComplianceObjectPage"
+                                    }
+                                }
+                            },
+                            "editableHeaderContent": false,
+                            "controlConfiguration": {
+                                "toCompliance/@com.sap.vocabularies.UI.v1.LineItem#Complaince1": {
+                                    "actions": {
+                                        "ComplianceAuditLogs": {
+                                            "press": "masterdata1.ext.controller.ComplianceAuditLogs.complianceAuditLogsPress",
+                                            "visible": true,
+                                            "enabled": true,
+                                            "requiresSelection": false,
+                                            "text": "ComplianceAuditLogs"
+                                        }
+                                    }
+                                },
+                                "master_Iliability/@com.sap.vocabularies.UI.v1.LineItem#Liability": {
+                                    "actions": {
+                                        "InsuranceAudit": {
+                                            "press": "masterdata1.ext.controller.InsuranceAuditLogs.insuranceAuditLogsPress",
+                                            "visible": true,
+                                            "enabled": true,
+                                            "requiresSelection": false,
+                                            "text": "Insurance Audit Logs"
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 },
-                "MasterData_master_complianceObjectPage": {
+                "MasterData_master_IliabilityObjectPage": {
                     "type": "Component",
-                    "id": "MasterData_master_complianceObjectPage",
+                    "id": "MasterData_master_IliabilityObjectPage",
                     "name": "sap.fe.templates.ObjectPage",
                     "options": {
                         "settings": {
-                            "contextPath": "/MasterData/master_compliance",
+                            "contextPath": "/MasterData/master_Iliability",
+                            "navigation": {},
+                            "editableHeaderContent": false,
+                            "content": {
+                                "body": {
+                                    "sections": {
+                                        "Liabilityattachments": {
+                                            "template": "masterdata1.ext.fragment.Liabilityattachments",
+                                            "position": {
+                                                "placement": "After",
+                                                "anchor": "GeneralInformation"
+                                            },
+                                            "title": "Attachments"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "MasterData_master_IEmployeeObjectPage": {
+                    "type": "Component",
+                    "id": "MasterData_master_IEmployeeObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "contextPath": "/MasterData/master_IEmployee",
+                            "navigation": {},
+                            "editableHeaderContent": false,
+                            "content": {
+                                "body": {
+                                    "sections": {
+                                        "Employeeattachments": {
+                                            "template": "masterdata1.ext.fragment.Employeeattachments",
+                                            "position": {
+                                                "placement": "After",
+                                                "anchor": "GeneralInformation"
+                                            },
+                                            "title": "Attachments"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "MasterData_master_IPropertyObjectPage": {
+                    "type": "Component",
+                    "id": "MasterData_master_IPropertyObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "contextPath": "/MasterData/master_IProperty",
+                            "navigation": {},
+                            "editableHeaderContent": false,
+                            "content": {
+                                "body": {
+                                    "sections": {
+                                        "PropertyAttachments": {
+                                            "template": "masterdata1.ext.fragment.PropertyAttachments",
+                                            "position": {
+                                                "placement": "After",
+                                                "anchor": "GeneralInformation"
+                                            },
+                                            "title": "Attachments"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "MasterData_toComplianceObjectPage": {
+                    "type": "Component",
+                    "id": "MasterData_toComplianceObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "contextPath": "/MasterData/toCompliance",
                             "navigation": {},
                             "content": {
                                 "body": {
@@ -263,82 +366,8 @@
                                         }
                                     }
                                 }
-                            }
-                        }
-                    }
-                },
-                "MasterData_master_IliabilityObjectPage": {
-                    "type": "Component",
-                    "id": "MasterData_master_IliabilityObjectPage",
-                    "name": "sap.fe.templates.ObjectPage",
-                    "options": {
-                        "settings": {
-                            "contextPath": "/MasterData/master_Iliability",
-                            "navigation": {},
-                            "content": {
-                                "body": {
-                                    "sections": {
-                                        "Insuranceattachments": {
-                                            "template": "masterdata1.ext.fragment.Insuranceattachments",
-                                            "position": {
-                                                "placement": "After",
-                                                "anchor": "GeneralInformation"
-                                            },
-                                            "title": "Attachments"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "MasterData_master_IEmployeeObjectPage": {
-                    "type": "Component",
-                    "id": "MasterData_master_IEmployeeObjectPage",
-                    "name": "sap.fe.templates.ObjectPage",
-                    "options": {
-                        "settings": {
-                            "contextPath": "/MasterData/master_IEmployee",
-                            "navigation": {},
-                            "content": {
-                                "body": {
-                                    "sections": {
-                                        "Attachaments": {
-                                            "template": "masterdata1.ext.fragment.Attachaments",
-                                            "position": {
-                                                "placement": "After",
-                                                "anchor": "GeneralInformation"
-                                            },
-                                            "title": "Attachments"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "MasterData_master_IPropertyObjectPage": {
-                    "type": "Component",
-                    "id": "MasterData_master_IPropertyObjectPage",
-                    "name": "sap.fe.templates.ObjectPage",
-                    "options": {
-                        "settings": {
-                            "contextPath": "/MasterData/master_IProperty",
-                            "navigation": {},
-                            "content": {
-                                "body": {
-                                    "sections": {
-                                        "Attachaments": {
-                                            "template": "masterdata1.ext.fragment.Attachaments",
-                                            "position": {
-                                                "placement": "After",
-                                                "anchor": "GeneralInformation"
-                                            },
-                                            "title": "Attachments"
-                                        }
-                                    }
-                                }
-                            }
+                            },
+                            "editableHeaderContent": false
                         }
                     }
                 }
@@ -358,6 +387,15 @@
                     },
                     "sap.fe.templates.ObjectPage.ObjectPageController#masterdata1::MasterData_master_IPropertyObjectPage": {
                         "controllerName": "masterdata1.ext.controller.Propertyobj"
+                    },
+                    "sap.fe.templates.ListReport.ListReportController": {
+                        "controllerName": "masterdata1.ext.controller.ListC"
+                    },
+                    "sap.fe.templates.ObjectPage.ObjectPageController#masterdata1::MasterData_toComplianceObjectPage": {
+                        "controllerName": "masterdata1.ext.controller.Complianceobj"
+                    },
+                    "sap.fe.templates.ObjectPage.ObjectPageController#masterdata1::MasterDataObjectPage": {
+                        "controllerName": "masterdata1.ext.controller.MasterObjectPAgeController"
                     }
                 }
             }

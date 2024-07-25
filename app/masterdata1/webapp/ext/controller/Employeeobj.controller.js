@@ -43,68 +43,102 @@ sap.ui.define(['sap/ui/core/mvc/ControllerExtension'], function (ControllerExten
 					})
 			},
 			routing: {
-				onAfterBinding: async function (oEvent) {
+				onAfterBinding: async function (oBindingContext) {
 					debugger;
-					// try {
-					// 	const path = oEvent.sPath;
 
-					// 	// Regular expression to match the id value
-					// 	const idMatch = path.match(/id=([a-f0-9\-]+)/i);
-					// 	var idValue = idMatch[1];
-					// 	// if (idMatch && idMatch[1]) {
-					// 	// 	var idValue = idMatch[1];
-					// 	// 	console.log("ID value:", idValue);
-					// 	// } else {
-					// 	// 	console.log("ID not found");
-					// 	// }
 
-					// 	const testdata = JSON.stringify({
-					// 		id: idValue
-					// 	});
-					// 	const functionname = 'funcimport';
-					// 	const oFunction = this.getView().getModel().bindContext(`/${functionname}(...)`);
-					// 	oFunction.setParameter('data', testdata);
-					// 	oFunction.setParameter('status', JSON.stringify({ status: 'getemployee' }));
-					// 	await oFunction.execute();
-					// 	const context = oFunction.getBoundContext();
-					// 	const getdata = context.getValue();
-					// 	let result = getdata.value;
-					// 	result = JSON.parse(result);
+					var oUploadSet = sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::CustomSubSection::Employeeattachments--uploadSet");
+					oUploadSet.bindAggregation("items", {
+						path: oBindingContext.getPath() + "/to_EmployeeFiles",
+						template: oUploadSet.getBindingInfo("items").template,
+						parameters: {
+							$orderby: 'createdAt desc'
+						}
+					})
+					oUploadSet.getBinding("items").refresh();
 
-					// } catch (error) {
-					// }
+					sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::Breadcrumbs").setVisible(false)
+					try {
+						var url = window.location.href;
+						var match = url.match(/master_IEmployee\(idemployee='([^']+)'/);
+						var id = match ? match[1] : null;
+						const testdata = JSON.stringify({
+							id: id
+						});
+						const functionname = 'funcimport';
+						const oFunction = this.getView().getModel().bindContext(`/${functionname}(...)`);
+						oFunction.setParameter('data', testdata);
+						oFunction.setParameter('status', JSON.stringify({ status: 'getemployee' }));
+						await oFunction.execute();
+						const context = oFunction.getBoundContext();
+						const getdata = context.getValue();
+						let result = getdata.value;
+						result = JSON.parse(result);
+						debugger
+						if (result.content1.length > 0) {
+							var schemacover = result.content1[0].select_coverage;
+							var schemacurr = result.content1[0].select_currencey;
+							if (schemacover == "" || schemacurr == "") {
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_sum::Field-edit").setEditable(false)
+								// sap.ui.getCore().byId("insurance::insuranceObjectPage--fe::FormContainer::GeneratedFacet1::FormElement::DataField::select_type_of_insurance::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_premium::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_premium_in_usd::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_date::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_expiry_date::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_Sum::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::name_of_subsidiary::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(false)
+							}
+							else {
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_sum::Field-edit").setEditable(true)
+								// sap.ui.getCore().byId("insurance::insuranceObjectPage--fe::FormContainer::GeneratedFacet1::FormElement::DataField::select_type_of_insurance::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_premium::Field-edit").setEditable(true)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_premium_in_usd::Field-edit").setEditable(true)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_date::Field-edit").setEditable(true)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_expiry_date::Field-edit").setEditable(true)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_Sum::Field-edit").setEditable(true)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::name_of_subsidiary::Field-edit").setEditable(true)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(true)
+							}
+						}
+						if (result.content2.length > 0) {
+							var draftscover = result.content2[0].select_coverage;
+							var draftscurr = result.content2[0].select_currencey;
+							if ((draftscover == "" || draftscurr == "") || (draftscover == null || draftscurr == null)) {
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_sum::Field-edit").setEditable(false)
+								// sap.ui.getCore().byId("insurance::insuranceObjectPage--fe::FormContainer::GeneratedFacet1::FormElement::DataField::select_type_of_insurance::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_premium::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_premium_in_usd::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_date::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_expiry_date::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_Sum::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::name_of_subsidiary::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(false)
+							}
+							else {
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_sum::Field-edit").setEditable(true)
+								// sap.ui.getCore().byId("insurance::insuranceObjectPage--fe::FormContainer::GeneratedFacet1::FormElement::DataField::select_type_of_insurance::Field-edit").setEditable(false)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_premium::Field-edit").setEditable(true)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_premium_in_usd::Field-edit").setEditable(true)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_date::Field-edit").setEditable(true)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_expiry_date::Field-edit").setEditable(true)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_Sum::Field-edit").setEditable(true)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::name_of_subsidiary::Field-edit").setEditable(true)
+								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(true)
+							}
+						}
 
-					var coverage = sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::select_coverage::Field-edit").getValue();
-					var currency = sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::select_currencey::Field-edit").getValue();
-					if (coverage == null || currency == null) {
-						sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_sum::Field-edit").setEditable(false)
-						// sap.ui.getCore().byId("insurance::insuranceObjectPage--fe::FormContainer::GeneratedFacet1::FormElement::DataField::select_type_of_insurance::Field-edit").setEditable(false)
-						sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_premium::Field-edit").setEditable(false)
-						sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_premium_in_usd::Field-edit").setEditable(false)
-						sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_date::Field-edit").setEditable(false)
-						sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_expiry_date::Field-edit").setEditable(false)
-						sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_Sum::Field-edit").setEditable(false)
-						sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::name_of_subsidiary::Field-edit").setEditable(false)
-						sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(false)
+
+
+
+
+
+					} catch (error) {
 					}
+
+
 				}
 			}
-			// editFlow:
-			// {
-			// 	onAfterCreate: function (oEvent) {
-			// 		debugger
-			// 		sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_sum::Field-edit").setEditable(false)
-			// 		// sap.ui.getCore().byId("insurance::insuranceObjectPage--fe::FormContainer::GeneratedFacet1::FormElement::DataField::select_type_of_insurance::Field-edit").setEditable(false)
-			// 		sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_premium::Field-edit").setEditable(false)
-			// 		sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_premium_in_usd::Field-edit").setEditable(false)
-			// 		sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_date::Field-edit").setEditable(false)
-			// 		sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_expiry_date::Field-edit").setEditable(false)
-			// 		sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_Sum::Field-edit").setEditable(false)
-			// 		sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::name_of_subsidiary::Field-edit").setEditable(false)
-			// 		sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(false)
-
-			// 	},
-			// }
 		}
 	});
 });

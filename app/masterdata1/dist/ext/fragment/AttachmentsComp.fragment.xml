@@ -3,7 +3,6 @@ displayBlock="true"
 xmlns:mvc="sap.ui.core.mvc"
 	xmlns:upload="sap.m.upload">
 	<VBox id= "11" >
-	
 						<upload:UploadSet
 					
 					id="uploadSet"
@@ -18,7 +17,7 @@ xmlns:mvc="sap.ui.core.mvc"
 								parameters: {
 									$orderby: 'createdAt desc'
 								},
-								templateShareable: false}"
+								templateShareable: true}"
 				>
 					<upload:toolbar>
 					</upload:toolbar>
