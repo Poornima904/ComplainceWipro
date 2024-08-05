@@ -58,6 +58,7 @@ sap.ui.define(['sap/ui/core/mvc/ControllerExtension'], function (ControllerExten
 					oUploadSet.getBinding("items").refresh();
 
 					sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::Breadcrumbs").setVisible(false)
+					sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(false)
 					try {
 						var url = window.location.href;
 						var match = url.match(/master_IEmployee\(idemployee='([^']+)'/);
@@ -76,6 +77,7 @@ sap.ui.define(['sap/ui/core/mvc/ControllerExtension'], function (ControllerExten
 						result = JSON.parse(result);
 						debugger
 						if (result.content1.length > 0) {
+							var other = result.content1[0].others;
 							var schemacover = result.content1[0].select_coverage;
 							var schemacurr = result.content1[0].select_currencey;
 							if (schemacover == "" || schemacurr == "") {
@@ -87,7 +89,7 @@ sap.ui.define(['sap/ui/core/mvc/ControllerExtension'], function (ControllerExten
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_expiry_date::Field-edit").setEditable(false)
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_Sum::Field-edit").setEditable(false)
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::name_of_subsidiary::Field-edit").setEditable(false)
-								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(false)
+
 							}
 							else {
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_sum::Field-edit").setEditable(true)
@@ -98,10 +100,15 @@ sap.ui.define(['sap/ui/core/mvc/ControllerExtension'], function (ControllerExten
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_expiry_date::Field-edit").setEditable(true)
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_Sum::Field-edit").setEditable(true)
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::name_of_subsidiary::Field-edit").setEditable(true)
+								// sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(true)
+							}
+							if (other !== null && other !== undefined && other !== "") {
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(true)
 							}
+
 						}
 						if (result.content2.length > 0) {
+							var other = result.content2[0].others;
 							var draftscover = result.content2[0].select_coverage;
 							var draftscurr = result.content2[0].select_currencey;
 							if ((draftscover == "" || draftscurr == "") || (draftscover == null || draftscurr == null)) {
@@ -113,7 +120,7 @@ sap.ui.define(['sap/ui/core/mvc/ControllerExtension'], function (ControllerExten
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_expiry_date::Field-edit").setEditable(false)
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_Sum::Field-edit").setEditable(false)
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::name_of_subsidiary::Field-edit").setEditable(false)
-								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(false)
+								// sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(false)
 							}
 							else {
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::enter_sum::Field-edit").setEditable(true)
@@ -124,6 +131,9 @@ sap.ui.define(['sap/ui/core/mvc/ControllerExtension'], function (ControllerExten
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::policy_expiry_date::Field-edit").setEditable(true)
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::convert_Sum::Field-edit").setEditable(true)
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::name_of_subsidiary::Field-edit").setEditable(true)
+								// sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(true)
+							}
+							if (other !== null && other !== undefined && other !== "") {
 								sap.ui.getCore().byId("masterdata1::MasterData_master_IEmployeeObjectPage--fe::FormContainer::GeneralInformation::FormElement::DataField::others").setVisible(true)
 							}
 						}

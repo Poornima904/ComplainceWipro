@@ -11,11 +11,6 @@ module.exports = cds.service.impl(async function () {
    
     var BPA = await cds.connect.to('wiproBPA');
 
-
-
-
-
-
     let { MasterData, insuranceEmployee, insuranceProperty, insuranceLiability,EmployeeFiles, LiabilityFiles, PropertyFiles, EntityAuditLogs, NewFiles, Files } = this.entities;
 
     this.before('CREATE', LiabilityFiles.drafts, async req => {
@@ -108,8 +103,6 @@ module.exports = cds.service.impl(async function () {
             // } catch (error) {
             //     console.log("Dest error", error)
             // }
-
-
             console.log("response11", response11)
 
         } catch (error) {
@@ -118,34 +111,11 @@ module.exports = cds.service.impl(async function () {
 
     });
 
-
-    // this.before('CREATE', 'Files', req => {
-    //     console.log('Create called')
-    //     console.log(JSON.stringify(req.data))
-    //     req.data.url = `https://7d2927dbtrial-dev-wiprocompilance-srv.cfapps.us10-001.hana.ondemand.com/odata/v4/my/Files(${req.data.ID})/content`
-    // })
-
-    // this.before('READ', 'Files', req => {
-    //     //check content-type
-    //     console.log('content-type: ', req.headers['content-type'])
-    // })
-   
-    // this.before('CREATE', 'NewFiles', req => {
-    //     console.log('Create called')
-    //     console.log(JSON.stringify(req.data))
-    //     req.data.url = `https://f6623a50trial-dev-wiprocompilance-srv.cfapps.us10-001.hana.ondemand.com/odata/v4/my/NewFiles(${req.data.ID})/content`
-    // })
-
-    // this.before('READ', 'NewFiles', req => {
-    //     //check content-type
-    //     console.log('content-type: ', req.headers['content-type'])
-    // })
-
     this.on('UPDATE', 'MasterData', async (req, next) => {
         debugger
         if (req.data?.master_newfiles) {
             req.data.master_newfiles.forEach(file => {
-                var filePosition = file.url.indexOf('false');
+                var filePosition = file.url.indexOf('false'); 
                 if (filePosition > 0) {
                     var firstPart = file.url.substring(0, filePosition);
                     var secondPart = file.url.substring(filePosition);
@@ -158,6 +128,7 @@ module.exports = cds.service.impl(async function () {
             debugger
             req.data.master_Iliability.forEach(liability => {
                 var liabfiles = liability.to_LiabilityFiles;
+                
                 liabfiles.forEach(file=>{
                     var filePosition = file.url.indexOf('false');
                     if (filePosition > 0) {
@@ -214,7 +185,6 @@ module.exports = cds.service.impl(async function () {
                 })
             })
         }
-
 
 
         var diff = await req.diff();
@@ -341,11 +311,11 @@ module.exports = cds.service.impl(async function () {
         }
 
         ////////////////////////// Employee insurance //////////////////////
-        if (diff?.insuranceEmployee) {
-            diff.insuranceEmployee.forEach(async (employee) => {
+        if (diff?.master_IEmployee) {
+            diff.master_IEmployee.forEach(async (employee) => {
                 if (employee?._op) {
                     var eOperationType = employee._op;
-                    var eEntity = "insuranceLiability ( " + employee.idemployee + " )";
+                    var eEntity = "insuranceEmployee ( " + employee.idemployee + " )";
 
                     ///////////// Employee UPDATE /////////////////////
                     if (employee?._old) {
@@ -360,7 +330,7 @@ module.exports = cds.service.impl(async function () {
                         })
                     }
 
-                    var eChangeString = JSON.stringify(iChanges);
+                    var eChangeString = JSON.stringify(eChanges);
 
                     ///////////////////////////////////////////////////////
                     if (eOperationType == 'create' || eOperationType == 'delete') {
@@ -387,17 +357,17 @@ module.exports = cds.service.impl(async function () {
 
 
         ////////////////////////// property insurance //////////////////////
-        if (diff?.insuranceProperty) {
-            diff.insuranceProperty.forEach(async (property) => {
+        if (diff?.master_IProperty) {
+            diff.master_IProperty.forEach(async (property) => {
                 if (property?._op) {
                     var pOperationType = property._op;
-                    var pEntity = "insuranceLiability ( " + property.idproperty + " )";
+                    var pEntity = "insuranceProperty ( " + property.idproperty + " )";
 
                     ///////////// property UPDATE /////////////////////
                     if (property?._old) {
                         var pChanges = [];
                         var pkeys = Object.keys(property._old);
-                        peys.forEach((key) => {
+                        pkeys.forEach((key) => {
                             pChanges.push({
                                 Field: key,
                                 OldValue: property._old[`${key}`],
@@ -413,8 +383,8 @@ module.exports = cds.service.impl(async function () {
                         var pUpdate = await INSERT.into(EntityAuditLogs).entries([{
                             DateTime: DateTime,
                             User: User,
-                            OperationType: eOperationType.toUpperCase(),
-                            Entity: eEntity
+                            OperationType: pOperationType.toUpperCase(),
+                            Entity: pEntity
                         }])
                     } else if (pOperationType == 'update') {
                         var pUpdate = await INSERT.into(EntityAuditLogs).entries([{

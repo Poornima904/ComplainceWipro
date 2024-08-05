@@ -20,6 +20,7 @@ sap.ui.define([
 			var item = oEvent.getParameter("item");
 		
 			var _createEntity = function(item) {
+				debugger
 				var bPath = item.getBindingContext().sPath;
 				var data = {
 					mediaType: item.getMediaType(),
@@ -38,7 +39,9 @@ sap.ui.define([
 				};
 		
 				return new Promise((resolve, reject) => {
+					debugger
 					$.ajax(settings)
+					
 						.done((results, textStatus, request) => {
 							resolve(results.ID);
 						})
@@ -50,6 +53,7 @@ sap.ui.define([
 		
 			_createEntity(item)
 				.then((id) => {
+					debugger
 					// var url = url1 + `Files(${id})/content`;
 					// var url = `/odata/v4/my/Files(${id})/content`;
 					var url = url1 + `/Files(ID=${id},IsActiveEntity=false)/content`
@@ -64,12 +68,14 @@ sap.ui.define([
 		},
         
 			onUploadCompleted: function (oEvent) {
+				debugger
 				var oUploadSet = this.byId("uploadSet");
 				oUploadSet.removeAllIncompleteItems();
 				oUploadSet.getBinding("items").refresh();
 			},
 
 			onRemovePressed: function (oEvent) {
+				debugger
 				oEvent.preventDefault();
 				oEvent.getParameter("item").getBindingContext().delete();
 				MessageToast.show("Selected file has been deleted");
